@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: Remote Calculator API
+  description: API for performing remote calculations
+  version: 0.0.1
+paths:
+  /restapi/calculate:
+    post:
+      summary: Remotely evaluates operation
+      description: Performs calculation for provided operands and operator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operands:
+                  type: array
+                  required: true
+                  items:
+                    type: string
+                    description: BigDecimal in any valid form
+                operator:
+                  type: string
+                  required: true
+                  enum:
+                    - PLUS
+                    - MINUS
+                    - MULT
+                    - DIV
+                    - SQRT
+                    - FACT
+      responses:
+        '200':
+          description: A JSON with a result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    description: BigDecimal in plain form
+                    type: string
+        '400':
+          description: A JSON with an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    required: true
+                    enum:
+                      - MISSED_OPERAND
+                      - EXTRA_OPERAND
+                      - WRONG_OPERAND_FORMAT
+                      - DIVISION_BY_ZERO
+                      - SQRT_OF_NEGATIVE
+                      - FACTORIAL_OF_NEGATIVE_OR_FLOAT
+                      - UNKNOWN_OPERATOR
+                  message:
+                    type: string
